@@ -1,3 +1,4 @@
+from base64 import standard_b64encode
 import scrapy
 
 
@@ -10,10 +11,12 @@ class PostsSpider(scrapy.Spider):
     
 
     def parse(self, response):
-        self.log('i just visited: ' + response.url)
+        # self.log('i just visited: ' + response.url)
         for kurse in response.css('tr'):
-            #breakpoint()
+            # breakpoint()
             item = {
+                # bip = BipItem()
+                # bip['name_kurse': kurse.css('a.fav_add::text').extract_first()] = bip.encode('utf-8'),
                 'name_kurse': kurse.css('a.fav_add::text').extract_first(),
                 'name_company': kurse.css('td.wisy_anbieter.wisyr_anbieter::text').extract_first(),
                 'phone': kurse.css('span.wisyr_anbieter_telefon::text').extract_first(),
@@ -31,7 +34,7 @@ class PostsSpider(scrapy.Spider):
         if next_page_url:
             next_page_url = response.urljoin(next_page_url)
             yield scrapy.Request(url=next_page_url, callback=self.parse)
-
+            
 
 
 #scrapy.utils.response.open_in_browser(response)
